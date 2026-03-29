@@ -1,22 +1,16 @@
 #include <stdio.h>
-
 int main()
 {
     int frames[50], retry[50] = {0};
     int f, w, i;
-
     printf("Enter number of frames: ");
     scanf("%d", &f);
-
     printf("Enter window size: ");
     scanf("%d", &w);
-
     printf("Enter %d frames (-1 for error):\n", f);
     for (i = 1; i <= f; i++)
         scanf("%d", &frames[i]);
-
     printf("\n--- GO-BACK-N PROTOCOL ---\n\n");
-
     for (i = 1; i <= f; i++)
     {
         while (frames[i] == -1)
@@ -30,7 +24,6 @@ int main()
                 frames[i] = i * 10;
             }
         }
-
         printf("Sending frame %d...\n", i);
         printf("Frame %d received successfully\n", frames[i]);
         printf("Acknowledgement sent for frame %d\n\n", i);
@@ -41,7 +34,6 @@ int main()
 
     if (f % w != 0)
         printf("Window acknowledgement received for remaining frames\n");
-
     return 0;
 }
 
