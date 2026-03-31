@@ -1,57 +1,46 @@
 #include <stdio.h>
 
-#define MAX 10
-#define INF 999
-
 int main() {
-    int n, i, j, k;
-    int cost[MAX][MAX];
-    int dist[MAX][MAX];
-    int nextHop[MAX][MAX];
+  int n;
+  printf("enter number of nodes: ");
+  scanf("%d", &n);
+  int cost[n][n], via[n][n];
 
-    printf("Enter number of nodes: ");
-    scanf("%d", &n);
-
-    printf("Enter cost matrix:\n");
-    for(i = 0; i < n; i++) {
-        for(j = 0; j < n; j++) {
-            scanf("%d", &cost[i][j]);
-            dist[i][j] = cost[i][j];
-            
-            if(i == j)
-                nextHop[i][j] = i;
-            else if(cost[i][j] != INF)
-                nextHop[i][j] = j;
-            else
-                nextHop[i][j] = -1;
-        }
+  printf("\nEnter routing cost matrix:\n");
+  for(int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      scanf("%d", &cost[i][j]);
     }
+  }
 
-   
-    for(k = 0; k < n; k++) {
-        for(i = 0; i < n; i++) {
-            for(j = 0; j < n; j++) {
-                if(dist[i][j] > dist[i][k] + dist[k][j]) {
-                    dist[i][j] = dist[i][k] + dist[k][j];
-                    nextHop[i][j] = nextHop[i][k];
-                }
-            }
-        }
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      via[i][j] = j;
     }
+  }
 
-    
-    for(i = 0; i < n; i++) {
-        printf("\nRouting table for router %d:\n", i+1);
-        printf("Destination\tNext Hop\tDistance\n");
-
-        for(j = 0; j < n; j++) {
-            printf("%d\t\t%d\t\t%d\n",
-                   j+1,
-                   nextHop[i][j] + 1,
-                   dist[i][j]);
+  int updated = 0;
+  do {
+    updated = 0;
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; ++j) {
+        for (int k = 0; k < n; ++k) {
+          if (cost[i][j] + cost[j][k] < cost[i][k]) {
+            cost[i][k] = cost[i][j] + cost[j][k];
+            via[i][k] = via[i][j];
+            updated = 1;
+          }
         }
+      }
     }
+  } while(updated);
 
-    return 0;
+  for (int i = 0; i < n; i++) {
+    printf("\nRouting table for router %c\n", i + 'A');
+    for (int j = 0; j < n; j++) {
+      printf("cost[%c --> %c] = %d, via %c\n", i + 'A', j + 'A', cost[i][j], via[i][j] + 'A');
+    }
+  }
+
+  return 0;
 }
-
